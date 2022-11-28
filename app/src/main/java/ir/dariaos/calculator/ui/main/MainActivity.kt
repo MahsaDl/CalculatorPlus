@@ -1,4 +1,4 @@
-package ir.dariaos.calculator.ui.main
+package com.gigaworks.tech.calculator.ui.main
 
 import android.R.attr.colorPrimary
 import android.animation.*
@@ -30,6 +30,7 @@ import ir.dariaos.calculator.ui.settings.SettingsActivity
 import ir.dariaos.calculator.ui.view.CalculatorEditText
 import ir.dariaos.calculator.util.*
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 import kotlin.math.sqrt
 
 
@@ -45,7 +46,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             appPreference.getStringPreference(AppPreference.ACCENT_THEME, AccentTheme.BLUE.name)
         setTheme(getAccentTheme(accentTheme))
         super.onCreate(savedInstanceState)
-        setupActionBar(binding.toolbar)
+//        setupActionBar(binding.toolbar)
 
         setupView()
         setupObservers()
@@ -70,7 +71,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         setExpression(newExpression)
     }
 
-    private val textSizeChangeListener = CalculatorEditText.OnTextSizeChangeListener { textView, oldSize ->
+    private val textSizeChangeListener =
+        CalculatorEditText.OnTextSizeChangeListener { textView, oldSize ->
             // Calculate the values needed to perform the scale and translation animations,
             // maintaining the same apparent baseline for the displayed text.
             val textScale = oldSize / textView.textSize
@@ -114,26 +116,35 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             //first row
             percent.setOnClickListener(buttonClick)
             openBracket.setOnClickListener(buttonClick)
-            closeBracket.setOnClickListener(buttonClick)
+//            mahsa
+//            closeBracket.setOnClickListener(buttonClick)
             //second row
             seven.setOnClickListener(buttonClick)
             eight.setOnClickListener(buttonClick)
             nine.setOnClickListener(buttonClick)
-            divide.setOnClickListener(buttonClick)
             //third row
             four.setOnClickListener(buttonClick)
             five.setOnClickListener(buttonClick)
             six.setOnClickListener(buttonClick)
-            multiply.setOnClickListener(buttonClick)
             //fourth row
             one.setOnClickListener(buttonClick)
             two.setOnClickListener(buttonClick)
             three.setOnClickListener(buttonClick)
-            plus.setOnClickListener(buttonClick)
             //fifth row
             decimal.setOnClickListener(buttonClick)
             zero.setOnClickListener(buttonClick)
-            minus.setOnClickListener(buttonClick)
+        }
+
+        //simple Pad
+        with(binding.simplePad) {
+            //first row
+            this?.divide?.setOnClickListener(buttonClick)
+            //second row
+            this?.multiply?.setOnClickListener(buttonClick)
+            //third row
+            this?.minus?.setOnClickListener(buttonClick)
+            //fourth row
+            this?.plus?.setOnClickListener(buttonClick)
         }
 
         //scientific Pad
@@ -143,9 +154,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             cos.setOnClickListener(buttonClick)
             tan.setOnClickListener(buttonClick)
             //second row
-            asin.setOnClickListener(buttonClick)
-            acos.setOnClickListener(buttonClick)
-            atan.setOnClickListener(buttonClick)
+//            asin.setOnClickListener(buttonClick)
+//            acos.setOnClickListener(buttonClick)
+//            atan.setOnClickListener(buttonClick)
             //third row
             exponential.setOnClickListener(buttonClick)
             log.setOnClickListener(buttonClick)
@@ -153,13 +164,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             power.setOnClickListener(buttonClick)
             //fourth row
             factorial.setOnClickListener(buttonClick)
-            squareRoot.setOnClickListener(buttonClick)
-            cubeRoot.setOnClickListener(buttonClick)
-            pi.setOnClickListener(buttonClick)
+//            squareRoot.setOnClickListener(buttonClick)
+//            cubeRoot.setOnClickListener(buttonClick)
+//            pi.setOnClickListener(buttonClick)
         }
 
         //delete onClick
-        binding.numPad.delete.setOnClickListener {
+        binding.delete?.setOnClickListener {
             it.isHapticFeedbackEnabled = true
             it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
             val expression = removeNumberSeparator(getExpression())
@@ -178,16 +189,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
 
         //delete long click
-        binding.numPad.delete.setOnLongClickListener {
+        binding.delete?.setOnLongClickListener {
             if (getExpression().isNotEmpty()) {
-                animateClear()
+    //                animateClear()
                 logEvent(CLICK_CLEAR)
             }
             true
         }
 
         //equal onClick
-        binding.numPad.equal.setOnClickListener {
+        binding.simplePad?.equal?.setOnClickListener {
             it.isHapticFeedbackEnabled = true
             it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
             val expression = removeNumberSeparator(getExpression())
@@ -219,62 +230,62 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
 
         //memory store click
-        binding.scientificPad.memoryStore.setOnClickListener {
-            it.isHapticFeedbackEnabled = true
-            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-            val result = removeNumberSeparator(getResult())
-            if (result.isNumber()) {
-                Toast.makeText(this, result, Toast.LENGTH_SHORT).show()
-                viewModel.setMemory(result)
-                logEvent(CLICK_MEMORY)
-            }
-        }
+//        binding.scientificPad.memoryStore.setOnClickListener {
+//            it.isHapticFeedbackEnabled = true
+//            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+//            val result = removeNumberSeparator(getResult())
+//            if (result.isNumber()) {
+//                Toast.makeText(this, result, Toast.LENGTH_SHORT).show()
+//                viewModel.setMemory(result)
+//                logEvent(CLICK_MEMORY)
+//            }
+//        }
 
         //memory restore click
-        binding.scientificPad.memoryRestore.setOnClickListener {
-            it.isHapticFeedbackEnabled = true
-            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-            val memory = viewModel.getMemory()
-            val expression = removeNumberSeparator(getExpression())
-            var newExpression = handleConstantClick(expression, memory, viewModel.isPrevResult)
-            viewModel.isPrevResult = false
-            if (viewModel.getNumberSeparator() != NumberSeparator.OFF) {
-                newExpression = addNumberSeparator(
-                    expression = newExpression,
-                    isIndian = (viewModel.getNumberSeparator() == NumberSeparator.INDIAN)
-                )
-            }
-            setExpression(newExpression)
-            logEvent(CLICK_MEMORY)
-        }
+//        binding.scientificPad.memoryRestore.setOnClickListener {
+//            it.isHapticFeedbackEnabled = true
+//            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+//            val memory = viewModel.getMemory()
+//            val expression = removeNumberSeparator(getExpression())
+//            var newExpression = handleConstantClick(expression, memory, viewModel.isPrevResult)
+//            viewModel.isPrevResult = false
+//            if (viewModel.getNumberSeparator() != NumberSeparator.OFF) {
+//                newExpression = addNumberSeparator(
+//                    expression = newExpression,
+//                    isIndian = (viewModel.getNumberSeparator() == NumberSeparator.INDIAN)
+//                )
+//            }
+//            setExpression(newExpression)
+//            logEvent(CLICK_MEMORY)
+//        }
 
-        binding.scientificPad.memoryAdd.setOnClickListener {
-            it.isHapticFeedbackEnabled = true
-            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-            val memory = viewModel.getMemory()
-            val result = removeNumberSeparator(getResult())
-            if (result.isNumber() && memory.isNumber()) {
-                val newMemory = memory.toDouble() + result.toDouble()
-                viewModel.setMemory(newMemory.toString())
-                logEvent(CLICK_MEMORY)
-            }
-        }
+//        binding.scientificPad.memoryAdd.setOnClickListener {
+//            it.isHapticFeedbackEnabled = true
+//            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+//            val memory = viewModel.getMemory()
+//            val result = removeNumberSeparator(getResult())
+//            if (result.isNumber() && memory.isNumber()) {
+//                val newMemory = memory.toDouble() + result.toDouble()
+//                viewModel.setMemory(newMemory.toString())
+//                logEvent(CLICK_MEMORY)
+//            }
+//        }
 
-        binding.scientificPad.memorySub.setOnClickListener {
-            it.isHapticFeedbackEnabled = true
-            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-            val memory = viewModel.getMemory()
-            val result = removeNumberSeparator(getResult())
-            if (result.isNumber() && memory.isNumber()) {
-                val newMemory = memory.toDouble() - result.toDouble()
-                viewModel.setMemory(newMemory.toString())
-                logEvent(CLICK_MEMORY)
-            }
-        }
+//        binding.scientificPad.memorySub.setOnClickListener {
+//            it.isHapticFeedbackEnabled = true
+//            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+//            val memory = viewModel.getMemory()
+//            val result = removeNumberSeparator(getResult())
+//            if (result.isNumber() && memory.isNumber()) {
+//                val newMemory = memory.toDouble() - result.toDouble()
+//                viewModel.setMemory(newMemory.toString())
+//                logEvent(CLICK_MEMORY)
+//            }
+//        }
 
-        binding.calculatorPadViewPager?.addScientificPadStateChangeListener {
-            binding.scientificPad.arrow.animate().rotationBy(180F).setDuration(300).start()
-        }
+//        binding.calculatorPadViewPager?.addScientificPadStateChangeListener {
+//            binding.scientificPad.arrow.animate().rotationBy(180F).setDuration(300).start()
+//        }
 
     }
 
@@ -312,13 +323,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
      * On back pressed, close the scientific pad if it is open
      * else close the app.
      * */
-    override fun onBackPressed() {
-        if (binding.calculatorPadViewPager?.currentItem == 0 || binding.calculatorPadViewPager == null) {
-            super.onBackPressed()
-        } else {
-            binding.calculatorPadViewPager?.currentItem = 0
-        }
-    }
+//    override fun onBackPressed() {
+//        if (binding.calculatorPadViewPager?.currentItem == 0 || binding.calculatorPadViewPager == null) {
+//            super.onBackPressed()
+//        } else {
+//            binding.calculatorPadViewPager?.currentItem = 0
+//        }
+//    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -363,13 +374,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     @SuppressLint("ResourceType")
     private fun showTutorial() {
         //close side panel before starting tutorial
-        if (binding.calculatorPadViewPager?.currentItem == 1) {
-            binding.calculatorPadViewPager?.currentItem = 0
-        }
+//        if (binding.calculatorPadViewPager?.currentItem == 1) {
+//            binding.calculatorPadViewPager?.currentItem = 0
+//        }
         val tapTargetSequence = TapTargetSequence(this)
         val delete = TapTarget
             .forView(
-                binding.numPad.delete,
+                binding.delete,
                 getString(R.string.delete_button),
                 getString(R.string.delete_button_desc)
             )
@@ -382,54 +393,54 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             .descriptionTextColor(colorPrimary)
             .descriptionTextSize(18)
             .cancelable(true)
-        val angle: TapTarget = TapTarget
-            .forToolbarMenuItem(
-                binding.toolbar,
-                R.id.angleType,
-                getString(R.string.angle_button),
-                getString(R.string.angle_button_desc)
-            )
-            .outerCircleColor(colorPrimary)
-            .outerCircleAlpha(1f)
-            .targetCircleColor(R.color.white)
-            .titleTextSize(28)
-            .tintTarget(true)
-            .titleTextColor(R.color.white)
-            .descriptionTextColor(R.color.white)
-            .descriptionTextSize(18)
-            .cancelable(true)
-        val options: TapTarget = TapTarget
-            .forToolbarOverflow(
-                binding.toolbar,
-                getString(R.string.options_menu),
-                getString(R.string.options_menu_desc)
-            )
-            .outerCircleColor(colorPrimary)
-            .outerCircleAlpha(1f)
-            .targetCircleColor(R.color.white)
-            .titleTextSize(28)
-            .tintTarget(true)
-            .titleTextColor(R.color.white)
-            .descriptionTextColor(R.color.white)
-            .descriptionTextSize(18)
-            .cancelable(true)
-            .id(56)
-        val share: TapTarget = TapTarget
-            .forToolbarMenuItem(
-                binding.toolbar,
-                R.id.share,
-                getString(R.string.share_button),
-                getString(R.string.share_button_desc)
-            )
-            .outerCircleColor(colorPrimary)
-            .outerCircleAlpha(1f)
-            .targetCircleColor(R.color.white)
-            .titleTextSize(28)
-            .tintTarget(true)
-            .titleTextColor(R.color.white)
-            .descriptionTextColor(R.color.white)
-            .descriptionTextSize(18)
-            .cancelable(true)
+//        val angle: TapTarget = TapTarget
+//            .forToolbarMenuItem(
+//                binding.toolbar,
+//                R.id.angleType,
+//                getString(R.string.angle_button),
+//                getString(R.string.angle_button_desc)
+//            )
+//            .outerCircleColor(R.color.primary)
+//            .outerCircleAlpha(1f)
+//            .targetCircleColor(R.color.white)
+//            .titleTextSize(28)
+//            .tintTarget(true)
+//            .titleTextColor(R.color.white)
+//            .descriptionTextColor(R.color.white)
+//            .descriptionTextSize(18)
+//            .cancelable(true)
+//        val options: TapTarget = TapTarget
+//            .forToolbarOverflow(
+//                binding.toolbar,
+//                getString(R.string.options_menu),
+//                getString(R.string.options_menu_desc)
+//            )
+//            .outerCircleColor(R.color.primary)
+//            .outerCircleAlpha(1f)
+//            .targetCircleColor(R.color.white)
+//            .titleTextSize(28)
+//            .tintTarget(true)
+//            .titleTextColor(R.color.white)
+//            .descriptionTextColor(R.color.white)
+//            .descriptionTextSize(18)
+//            .cancelable(true)
+//            .id(56)
+//        val share: TapTarget = TapTarget
+//            .forToolbarMenuItem(
+//                binding.toolbar,
+//                R.id.share,
+//                getString(R.string.share_button),
+//                getString(R.string.share_button_desc)
+//            )
+//            .outerCircleColor(R.color.primary)
+//            .outerCircleAlpha(1f)
+//            .targetCircleColor(R.color.white)
+//            .titleTextSize(28)
+//            .tintTarget(true)
+//            .titleTextColor(R.color.white)
+//            .descriptionTextColor(R.color.white)
+//            .descriptionTextSize(18)
+//            .cancelable(true)
         val ms = TapTarget.forView(
             binding.scientificPad.memoryStore,
             getString(R.string.memory_store), getString(R.string.memory_store_desc)
@@ -457,21 +468,21 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             .descriptionTextSize(18)
             .cancelable(true)
 
-        tapTargetSequence.targets(delete, angle, share, options, ms, mr)
+        tapTargetSequence.targets(delete, ms, mr)
 
-        tapTargetSequence.listener(object : TapTargetSequence.Listener {
-            override fun onSequenceFinish() {
-                binding.calculatorPadViewPager?.currentItem = 0
-            }
-
-            override fun onSequenceStep(lastTarget: TapTarget, targetClicked: Boolean) {
-                if (lastTarget.id() == 56) {
-                    binding.calculatorPadViewPager?.currentItem = 1
-                }
-            }
-
-            override fun onSequenceCanceled(lastTarget: TapTarget) {}
-        })
+//        tapTargetSequence.listener(object : TapTargetSequence.Listener {
+//            override fun onSequenceFinish() {
+//                binding.calculatorPadViewPager?.currentItem = 0
+//            }
+//
+//            override fun onSequenceStep(lastTarget: TapTarget, targetClicked: Boolean) {
+//                if (lastTarget.id() == 56) {
+//                    binding.calculatorPadViewPager?.currentItem = 1
+//                }
+//            }
+//
+//            override fun onSequenceCanceled(lastTarget: TapTarget) {}
+//        })
         tapTargetSequence.continueOnCancel(true).start()
     }
 
@@ -516,30 +527,30 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         return color
     }
 
-    private fun animateClear() {
-        with(binding) {
-            val cx = clearView.right
-            val cy = clearView.bottom
-            val l = clearView.height
-            val b = clearView.width
-            val finalRadius = sqrt((l * l + b * b).toDouble()).toInt()
-            val anim = ViewAnimationUtils
-                .createCircularReveal(clearView, cx, cy, 0f, finalRadius.toFloat())
-            clearView.visibility = View.VISIBLE
-            anim.duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
-            anim.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    setExpression("")
-                    setResult("")
-                    getResultEditText().setTextColor(getResultTextColor())
-                    clearView.visibility = View.INVISIBLE
-                    mCurrentAnimator = null
-                }
-            })
-            mCurrentAnimator = anim
-            anim.start()
-        }
-    }
+//    private fun animateClear() {
+//        with(binding) {
+//            val cx = clearView.right
+//            val cy = clearView.bottom
+//            val l = clearView.height
+//            val b = clearView.width
+//            val finalRadius = sqrt((l * l + b * b).toDouble()).toInt()
+//            val anim = ViewAnimationUtils
+//                .createCircularReveal(clearView, cx, cy, 0f, finalRadius.toFloat())
+//            clearView.visibility = View.VISIBLE
+//            anim.duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
+//            anim.addListener(object : AnimatorListenerAdapter() {
+//                override fun onAnimationEnd(animation: Animator) {
+//                    setExpression("")
+//                    setResult("")
+//                    getResultEditText().setTextColor(getResultTextColor())
+//                    clearView.visibility = View.INVISIBLE
+//                    mCurrentAnimator = null
+//                }
+//            })
+//            mCurrentAnimator = anim
+//            anim.start()
+//        }
+//    }
 
     private fun setExpressionAfterEqual(answer: String) {
         // Calculate the values needed to perform the scale and translation animations,
