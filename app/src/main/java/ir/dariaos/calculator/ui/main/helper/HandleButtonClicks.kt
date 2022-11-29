@@ -12,7 +12,7 @@ fun handleDelete(expression: String): String {
     return tempExpression
 }
 
-fun handleClick(expression: String, string: String, isPrevResult: Boolean = false): String {
+fun handleClick(expression: String, string: String, isPrevResult: Boolean = false, cursorPosition: Int): String {
     val numberSet = setOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
     val trigonometricSet = setOf(
         "sin",
@@ -38,6 +38,7 @@ fun handleClick(expression: String, string: String, isPrevResult: Boolean = fals
         "-", "\u2212" -> handleMinusClick(expression, string)
         "(" -> handleOpenBracketClick(expression)
         ")" -> handleCloseBracketClick(expression)
+        "()" -> handleBracketsClickTest(expression,cursorPosition)
         "." -> handleDecimalClick(expression)
         "C" -> handleClearAllClick()
         else -> "$expression$string"
@@ -117,6 +118,44 @@ private fun handleOpenBracketClick(expression: String): String {
     if (lastChar.isNumber() || lastChar.isRightUnaryOperator() || lastChar == ')') return "$expression×("
     if (lastChar.isOperator() || lastChar == '(') return "$expression("
     if (lastChar == '.') return "${expression}0×("
+    return expression
+}
+
+private fun handleBracketsClickTest(expression: String, cursorPosition: Int): String {
+    if (expression.isEmpty()) return "("
+    val lastChar = expression.last()
+
+    val textLength = expression.length
+
+    var openParentheses = 0
+    var closeParentheses = 0
+
+    for (i in 0 until cursorPosition) {
+        if (expression[i] == '(') {
+            openParentheses += 1
+        }
+        if (expression[i] == ')') {
+            closeParentheses += 1
+        }
+    }
+
+    if (openParentheses == closeParentheses
+        || expression.subSequence(textLength - 1, textLength) == "("
+        || expression.subSequence(textLength - 1, textLength) in "×÷+-^"
+    ){
+        if (lastChar.isNumber() || lastChar.isRightUnaryOperator() || lastChar == ')') return "$expression×("
+        if (lastChar.isOperator() || lastChar == '(') return "$expression("
+        if (lastChar == '.') return "${expression}0×("
+        return expression
+    }else if (closeParentheses < openParentheses && expression.subSequence(
+            textLength - 1,
+            textLength
+        ) != "("
+    ){
+        if (lastChar.isNumber() || lastChar.isRightUnaryOperator() || lastChar == ')') return "$expression)"
+        if (lastChar == '.') return "${expression}0)"
+        return expression
+    }
     return expression
 }
 

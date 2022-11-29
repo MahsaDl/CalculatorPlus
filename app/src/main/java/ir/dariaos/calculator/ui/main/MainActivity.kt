@@ -30,8 +30,6 @@ import ir.dariaos.calculator.ui.settings.SettingsActivity
 import ir.dariaos.calculator.ui.view.CalculatorEditText
 import ir.dariaos.calculator.util.*
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
-import kotlin.math.sqrt
 
 
 @AndroidEntryPoint
@@ -60,7 +58,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
         val text = (it as Button).text.toString()
         val expression = removeNumberSeparator(getExpression())
-        var newExpression = handleClick(expression, text, viewModel.isPrevResult)
+        val cursorPosition =binding.resultPad.expression.selectionStart
+        var newExpression = handleClick(expression, text, viewModel.isPrevResult, cursorPosition)
         viewModel.isPrevResult = false
         if (viewModel.getNumberSeparator() != NumberSeparator.OFF) {
             newExpression = addNumberSeparator(
@@ -116,7 +115,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             //first row
             clearAll?.setOnClickListener(buttonClick)
             percent.setOnClickListener(buttonClick)
-            openBracket.setOnClickListener(buttonClick)
+            //            mahsa
+//            openBracket.setOnClickListener(buttonClick)
+            brackets?.setOnClickListener(buttonClick)
 //            mahsa
 //            closeBracket.setOnClickListener(buttonClick)
             //second row

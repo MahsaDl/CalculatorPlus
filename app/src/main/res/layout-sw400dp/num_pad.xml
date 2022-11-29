@@ -24,13 +24,13 @@
             android:text="C"
             android:textAppearance="@style/TextAppearance.CalculatorPlus.Subtitle1"
             android:textColor="#FFA979"
-            app:layout_constraintEnd_toStartOf="@id/openBracket"
+            app:layout_constraintEnd_toStartOf="@id/brackets"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="HardcodedText" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/openBracket"
+            android:id="@+id/brackets"
             style="@style/Widget.CalculatorPlus.NumPad.Primary"
 
             android:layout_width="72dp"
@@ -54,7 +54,7 @@
             android:textAppearance="@style/TextAppearance.CalculatorPlus.Subtitle1"
             android:textColor="#6750A4"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/openBracket"
+            app:layout_constraintStart_toEndOf="@id/brackets"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="HardcodedText" />
 
