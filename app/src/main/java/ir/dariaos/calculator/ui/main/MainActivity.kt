@@ -1,4 +1,4 @@
-package com.gigaworks.tech.calculator.ui.main
+package ir.dariaos.calculator.ui.main
 
 import android.R.attr.colorPrimary
 import android.animation.*

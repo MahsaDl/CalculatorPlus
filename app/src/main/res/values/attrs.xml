@@ -8,6 +8,9 @@
     <attr name="numPadPrimary" format="color" />
     <attr name="operatorBtnColor" format="color" />
     <attr name="clearColor" format="color" />
+<!--    mahsa-->
+    <attr name="colorSurfaceVariant" format="color" />
+    <attr name="colorOnSurfaceVariant" format="color"/>
 
     <declare-styleable name="CalculatorEditText">
         <attr name="minTextSize" format="dimension" />

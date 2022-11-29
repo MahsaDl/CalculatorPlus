@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
+import ir.dariaos.calculator.ui.main.MainActivity
 import ir.dariaos.calculator.BuildConfig
 import ir.dariaos.calculator.R
 import ir.dariaos.calculator.databinding.ActivitySettingsBinding

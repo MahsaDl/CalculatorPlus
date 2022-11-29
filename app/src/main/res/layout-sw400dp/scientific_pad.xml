@@ -64,7 +64,7 @@
             android:layout_height="match_parent"
             android:text="cos"
             android:textColor="#6750A4"
-            android:textAppearance="@style/TextAppearance.CalculatorPlus.Headline5"
+            android:textAppearance="@style/TextAppearance.DariaCalculator.TitleLarge"
             app:layout_constraintEnd_toStartOf="@id/tan"
             app:layout_constraintStart_toEndOf="@id/sin"
             app:layout_constraintTop_toTopOf="parent"

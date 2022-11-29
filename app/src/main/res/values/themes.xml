@@ -105,13 +105,10 @@
         <item name="android:textColor">?attr/textPrimary</item>
     </style>
     <style name="TextAppearance.CalculatorPlus.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
-        <item name="android:textColor">#49454F</item>
-        <item name="android:textSize">32sp</item>
-
+        <item name="android:textColor">?attr/textPrimary</item>
     </style>
     <style name="TextAppearance.CalculatorPlus.Subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2">
-        <item name="android:textColor">#6750A4</item>
-        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">?attr/textPrimary</item>
     </style>
     <style name="TextAppearance.CalculatorPlus.Body1" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">?attr/textPrimary</item>
@@ -129,5 +126,17 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">?attr/textPrimary</item>
     </style>
+    <!--num_pad-->
+    <style name="TextAppearance.DariaCalculator.HeadlineLarge" parent="TextAppearance.Material3.HeadlineLarge">
+        <item name="android:textColor">?attr/colorOnPrimaryContainer</item>
+    </style>
 
+    <style name="TextAppearance.DariaCalculator.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textColor">?attr/colorPrimary</item>
+    </style>
+
+    <!--simple_pad-->
+    <style name="TextAppearance.DariaCalculator.HeadlineLargeSimplePad" parent="TextAppearance.Material3.HeadlineLarge">
+        <item name="android:textColor">?attr/colorPrimary</item>
+    </style>
 </resources>
