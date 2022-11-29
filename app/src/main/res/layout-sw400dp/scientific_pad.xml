@@ -17,7 +17,7 @@
         app:layout_constraintVertical_bias="0">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/nat"
+            android:id="@+id/inv"
             style="@style/Widget.CalculatorPlus.NumPad.Secondary"
             android:layout_width="56dp"
             android:layout_height="match_parent"
@@ -38,7 +38,7 @@
             android:textColor="#6750A4"
             android:textAppearance="@style/TextAppearance.CalculatorPlus.Headline5"
             app:layout_constraintEnd_toStartOf="@id/sin"
-            app:layout_constraintStart_toEndOf="@id/nat"
+            app:layout_constraintStart_toEndOf="@id/inv"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="HardcodedText"
 
@@ -49,7 +49,7 @@
             style="@style/Widget.CalculatorPlus.NumPad.Secondary"
             android:layout_width="56dp"
             android:layout_height="match_parent"
-            android:text="Sin"
+            android:text="sin"
             android:textColor="#6750A4"
             android:textAppearance="@style/TextAppearance.CalculatorPlus.Headline5"
             app:layout_constraintEnd_toStartOf="@id/cos"
