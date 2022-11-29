@@ -114,6 +114,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         //number Pad
         with(binding.numPad) {
             //first row
+            clearAll?.setOnClickListener(buttonClick)
             percent.setOnClickListener(buttonClick)
             openBracket.setOnClickListener(buttonClick)
 //            mahsa

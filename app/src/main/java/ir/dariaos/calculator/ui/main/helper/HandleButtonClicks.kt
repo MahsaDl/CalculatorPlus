@@ -39,6 +39,7 @@ fun handleClick(expression: String, string: String, isPrevResult: Boolean = fals
         "(" -> handleOpenBracketClick(expression)
         ")" -> handleCloseBracketClick(expression)
         "." -> handleDecimalClick(expression)
+        "C" -> handleClearAllClick()
         else -> "$expression$string"
     }
 }
@@ -87,6 +88,10 @@ private fun handleDecimalClick(expression: String): String {
     if (lastChar.isRightUnaryOperator() || lastChar == ')') return "$expression×0."
     if (lastChar.isOperator() || lastChar == '(') return "${expression}0."
     return expression
+}
+
+private fun handleClearAllClick(): String {
+    return ""
 }
 
 private fun handleCloseBracketClick(expression: String): String {
